@@ -3,10 +3,11 @@ var app = new Vue({
   data: {
     message: "Olá Vue!",
     tasks: [],
-    title: '',
-    date: '',
-    project: '',
+    title: "",
+    date: "",
+    project: "",
     modoAdicionar: false,
+    indexCard: null,
   },
   methods: {
     getTasks() {
@@ -21,19 +22,33 @@ var app = new Vue({
       this.modoAdicionar = true;
     },
     save() {
-      this.tasks.push({
-        title: this.title,
-        date: this.date,
-        project: this.project,
-      })
+      if (this.indexCard != null) {
+        this.tasks[this.indexCard].title = this.title;
+        this.tasks[this.indexCard].date = this.date;
+        this.tasks[this.indexCard].project = this.project;
+        this.indexCard = null;
+      } else {
+        this.tasks.push({
+          title: this.title,
+          date: this.date,
+          project: this.project,
+        });
+      }
       this.modoAdicionar = false;
-      this.title = '';
-      this.date = '';
-      this.project = '';
+      this.title = "";
+      this.date = "";
+      this.project = "";
     },
     exclude(index) {
-      this.tasks.splice(index, 1)
-    }
+      this.tasks.splice(index, 1);
+    },
+    edit(index) {
+      this.title = this.tasks[index].title;
+      this.date = this.tasks[index].date;
+      this.project = this.tasks[index].project;
+      this.indexCard = index;
+      this.adicionar();
+    },
   },
   created() {
     console.log("created");
